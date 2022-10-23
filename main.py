@@ -1,8 +1,6 @@
 from time import sleep
 from sys import exit
-from warnings import catch_warnings
 from pytube import YouTube, Channel
-# from pytube import Stream
 import os
 
 #accept video url from user
@@ -22,27 +20,32 @@ else:
     print("Invalid input..")
     exit(-1)
     
-
 #accept file name
 download_name = input("Save the file\nName: ")
-os.system("cls")
-
-
 
 #get information of video
-print(f"Video: {yt.title}\nChannel: {ch.channel_name}\nFile format: {file_format}\n")
+def getVideoInfo():
+    os.system("cls")
+    # Sometimes crashes here on line 32
+    print(f"Video: {yt.title}\nChannel: {ch.channel_name}\nFile format: {file_format}\n")
+    sleep(2)
+    print("Downloading...\n")
 
-sleep(2)
-print("Downloading...\n")
-#download the video
-# yt.streams.filter(type="video", subtype="mp4", progressive=True).get_highest_resolution().download(filename=download_name)
+getVideoInfo()
 
-
-#------------------ FIX MP3 DOWNLOAD------------
-
-if file_format == ".mp4":
-    yt.streams.filter(mime_type="video/mp4", progressive=True).get_highest_resolution().download(filename=download_name+file_format, max_retries=10)
-elif file_format == ".mp3":
-    yt.streams.filter(mime_type="audio/mp3").get_audio_only().download(filename=download_name+file_format, max_retries=10)
-    
-print("Successful!")
+retries = 5
+for i in range(5):
+    try:
+        if file_format == ".mp4":
+            yt.streams.filter(mime_type="video/mp4", progressive=True).get_highest_resolution().download(filename=download_name+file_format, max_retries=10)
+        elif file_format == ".mp3":
+            yt.streams.get_audio_only().download(filename=download_name+file_format, max_retries=10)
+    except:
+        print(f"Something went wrong! Retries left {retries}")
+        retries -= 1
+        sleep(3)
+        getVideoInfo()
+    else:
+        print("Successful!")
+        sleep(5)
+        break
