@@ -4,11 +4,25 @@ from pytube import YouTube, Channel
 import os
 
 #accept video url from user
-print("-- Youtube video downloader --\n")
-video_url = input("Enter url: ")
+while True:
+    print("-- Youtube video downloader --\n")
+    video_url = input("Enter url: ").strip()
+    if video_url.find("https://") == -1:
+        print("Invalid input")
+        sleep(2)
+        os.system("cls")
+    else:
+        break
+while True:
+    try:
+        yt = YouTube(video_url)
+        ch = Channel(yt.channel_url)
+    except:
+        print("Connection error occurred while trying to get information of the video")
+    else:
+        os.system("cls")
+        break
 
-yt = YouTube(video_url)
-ch = Channel(yt.channel_url)
 
 #accept .mp4 or .mp3 file formats
 file_format = int(input("Available:\n(1) mp4\n(2) mp3\nChoose your file format: "))
