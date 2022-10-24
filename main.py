@@ -18,21 +18,25 @@ while True:
         yt = YouTube(video_url)
         ch = Channel(yt.channel_url)
     except:
-        print("Connection error occurred while trying to get information of the video")
+        print("Connection error occurred while trying to get information of the video\nTrying again...")
+        sleep(2)
     else:
         os.system("cls")
         break
 
 
 #accept .mp4 or .mp3 file formats
-file_format = int(input("Available:\n(1) mp4\n(2) mp3\nChoose your file format: "))
-if file_format == 1:
-    file_format = ".mp4"
-elif file_format == 2:
-    file_format = ".mp3"
-else:
-    print("Invalid input..")
-    exit(-1)
+while True:
+    file_format = int(input("Available:\n(1) mp4\n(2) mp3\nChoose your file format: ").strip())
+    if file_format == 1 or file_format == ".mp4" or file_format == "mp4":
+        file_format = ".mp4"
+        break
+    elif file_format == 2 or file_format == ".mp3" or file_format == "mp3":
+        file_format = ".mp3"
+        break
+    else:
+        os.system("cls")
+        print("Invalid input..")
     
 #accept file name
 download_name = input("Save the file\nName: ")
@@ -40,7 +44,6 @@ download_name = input("Save the file\nName: ")
 #get information of video
 def getVideoInfo():
     os.system("cls")
-    # Sometimes crashes here on line 32
     print(f"Video: {yt.title}\nChannel: {ch.channel_name}\nFile format: {file_format}\n")
     sleep(2)
     print("Downloading...\n")
